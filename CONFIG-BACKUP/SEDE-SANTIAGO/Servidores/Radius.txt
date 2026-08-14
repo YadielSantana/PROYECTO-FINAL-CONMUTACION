@@ -1,0 +1,20 @@
+client R-SANTIAGO {
+    ipaddr = 192.168.4.145
+    secret = northline2026@
+}
+
+
+client SW-SAN-1 {
+    ipaddr = 192.168.4.146
+    secret = northline2026@
+}
+
+
+client SW-SAN-2 {
+    ipaddr = 192.168.4.147
+    secret = northline2026@
+}
+
+
+
+

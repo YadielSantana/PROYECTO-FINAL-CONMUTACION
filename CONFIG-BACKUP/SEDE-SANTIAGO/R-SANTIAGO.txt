@@ -1,0 +1,87 @@
+===================
+R-SANTIAGO
+===================
+
+Configuracion Basica
+-----------------------
+
+enable
+configure terminal
+
+hostname SANTIAGO
+
+
+interface Ethernet0/0
+ description Conexion a R-ISP
+ ip address 19.0.0.6 255.255.255.252
+ ip nat outside
+ no shutdown
+
+
+interface Ethernet0/1
+ description Trunk hacia SW-SAN-1
+ no ip address
+ no shutdown
+
+! VLAN 100: Centro de Datos (192.168.4.48/28)
+interface Ethernet0/1.100
+ encapsulation dot1Q 100
+ ip address 192.168.4.49 255.255.255.240
+ ip nat inside
+ ip helper-address 192.168.4.50
+
+
+! VLAN 110: Ventas (192.168.3.192/27)
+interface Ethernet0/1.110
+ encapsulation dot1Q 110
+ ip address 192.168.3.193 255.255.255.224
+ ip nat inside
+ ip helper-address 192.168.4.50
+
+
+! VLAN 120: Administración (192.168.4.96/28)
+interface Ethernet0/1.120
+ encapsulation dot1Q 120
+ ip address 192.168.4.97 255.255.255.240
+ ip nat inside
+ ip helper-address 192.168.4.50
+ 
+ ! VLAN 99 ADMIN-RED
+interface Ethernet0/1.99
+ encapsulation dot1Q 99
+ ip address 192.168.4.145 255.255.255.240
+ ip nat inside
+
+
+! --- RUTA POR DEFECTO HACIA ISP ---
+ip route 0.0.0.0 0.0.0.0 19.0.0.5
+
+! --- CONFIGURACIÓN DE NAT / PAT ---
+access-list 1 permit 192.168.4.48 0.0.0.15
+access-list 1 permit 192.168.3.192 0.0.0.31
+access-list 1 permit 192.168.4.96 0.0.0.15
+access-list 1 permit 192.168.4.144 0.0.0.15
+
+
+ip nat inside source list 1 interface Ethernet0/0 overload
+
+end
+write memory
+
+
+
+
+--------------------------
+RADIUS
+-----------------------
+
+aaa new-model
+
+radius server FREERADIUS_SERVER
+ address ipv4 192.168.4.53 auth-port 1812 acct-port 1813
+ key northline2026@
+ ip radius source-interface Ethernet0/1.99
+ aaa authentication login default group radius local
+ line vty 0 4
+ login authentication default
+ transport input ssh

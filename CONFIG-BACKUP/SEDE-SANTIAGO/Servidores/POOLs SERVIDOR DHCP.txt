@@ -1,0 +1,28 @@
+
+# POOL: VLAN  VENTAS
+
+subnet 192.168.3.192 netmask 255.255.255.224 {
+    range 192.168.3.194  192.168.3.222;
+    option routers 192.168.3.193;
+    option subnet-mask 255.255.255.224;
+    option domain-name-servers 8.8.8.8;
+}
+
+# POOL VLAN CENTRO DE DATOS
+
+subnet 192.168.4.48 netmask 255.255.255.240 {
+    range 192.168.4.53 192.168.4.62;
+    option routers 192.168.4.49;
+    option subnet-mask 255.255.255.240;
+    option domain-name-servers 8.8.8.8;
+}
+
+
+# POOL VLAN ADMINISTRACION
+
+subnet 192.168.4.96 netmask 255.255.255.240 {
+    range 192.168.4.98 192.168.4.110;
+    option routers 192.168.4.97;
+    option subnet-mask 255.255.255.240;
+    option domain-name-servers 8.8.8.8;
+}

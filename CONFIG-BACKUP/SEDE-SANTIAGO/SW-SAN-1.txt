@@ -1,0 +1,49 @@
+=========
+SW-SAN-1
+=========
+enable
+configure terminal
+
+hostname SW-SAN-1
+
+! Creación de VLANs
+vlan 100
+ name Centro_de_Datos
+vlan 110
+ name Ventas
+vlan 120
+ name Administracion
+ vlan 99
+ name ADMIN-RED
+exit
+
+! Enlace Troncal hacia Router SANTIAGO
+interface Ethernet0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 100,110,120
+ no shutdown
+
+! Enlace Troncal EtherChannel hacia SW-SAN-2 (e0/1 y e0/2)
+interface range Ethernet0/1 - 2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 100,110,120
+ channel-group 1 mode desirable
+ no shutdown
+
+interface Port-channel 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 100,110,120
+ no shutdown
+
+interface vlan 99
+ description Interfaz de Administracion
+ ip address 192.168.4.146 255.255.255.240
+ no shutdown
+
+! Gateway por defecto para salir a otras redes/VLANs
+ip default-gateway 192.168.4.145
+end
+write memory

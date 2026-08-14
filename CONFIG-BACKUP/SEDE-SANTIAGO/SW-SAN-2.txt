@@ -1,0 +1,62 @@
+enable
+configure terminal
+
+hostname SW-SAN-2
+
+! Creación de VLANs
+vlan 100
+ name Centro_de_Datos
+vlan 110
+ name Ventas
+vlan 120
+ name Administracion
+exit
+
+! Enlace Troncal EtherChannel hacia SW-SAN-1 (e0/1 y e0/2)
+interface range Ethernet0/1 - 2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 100,110,120
+ channel-group 1 mode auto
+ no shutdown
+
+interface Port-channel 1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 100,110,120
+ no shutdown
+
+! --- PUERTOS DE ACCESO (Centro de Datos - VLAN 100) ---
+interface range Ethernet1/1 - 2, Ethernet0/3
+ switchport mode access
+ switchport access vlan 100
+ no shutdown
+
+! --- PUERTO DE ACCESO (Ventas - VLAN 110) ---
+interface Ethernet2/0
+ switchport mode access
+ switchport access vlan 110
+ no shutdown
+
+! --- PUERTO DE ACCESO (Administración - VLAN 120) ---
+interface Ethernet2/1
+ switchport mode access
+ switchport access vlan 120
+ no shutdown
+ 
+ interface vlan 99
+ description Interfaz de Administracion
+ ip address 192.168.4.147 255.255.255.240
+ no shutdown
+ 
+ interface Port-channel 1
+ switchport trunk allowed vlan add 99
+
+interface range Ethernet0/1 - 2
+ switchport trunk allowed vlan add 99
+
+! Gateway por defecto para salir a otras redes/VLANs
+ip default-gateway 192.168.4.145
+
+end
+write memory

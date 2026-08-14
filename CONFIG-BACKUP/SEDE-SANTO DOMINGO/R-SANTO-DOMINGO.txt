@@ -1,0 +1,72 @@
+enable
+configure terminal
+hostname SANTO-DOMINGO
+
+! --- 1. Enlace WAN hacia R-ISP ---
+interface Ethernet0/0
+ description WAN to ISP
+ ip address 19.0.0.2 255.255.255.252
+ ip nat outside
+ no shutdown
+
+! --- 2. Inter-VLAN Routing (Subinterfaces en e0/1) ---
+interface Ethernet0/1
+ no shutdown
+
+interface Ethernet0/1.10
+ description VLAN 10 Call Center
+ encapsulation dot1Q 10
+ ip address 192.168.0.1 255.255.255.0
+ ip nat inside
+
+interface Ethernet0/1.20
+ description VLAN 20 Ventas
+ encapsulation dot1Q 20
+ ip address 192.168.2.129 255.255.255.128
+ ip nat inside
+
+interface Ethernet0/1.30
+ description VLAN 30 RRHH
+ encapsulation dot1Q 30
+ ip address 192.168.2.1 255.255.255.128
+ ip nat inside
+
+interface Ethernet0/1.40
+ description VLAN 40 Operaciones
+ encapsulation dot1Q 40
+ ip address 192.168.1.1 255.255.255.128
+ ip nat inside
+
+interface Ethernet0/1.99
+ description VLAN 99 ADMIN-RED
+ encapsulation dot1Q 99
+ ip address 192.168.4.129 255.255.255.240
+ ip nat inside
+
+! --- 3. Pools DHCP para los Clientes ---
+ip dhcp pool VLAN10_POOL
+ network 192.168.0.0 255.255.255.0
+ default-router 192.168.0.1
+ dns-server 8.8.8.8
+
+ip dhcp pool VLAN20_POOL
+ network 192.168.2.128 255.255.255.128
+ default-router 192.168.2.129
+ dns-server 8.8.8.8
+
+ip dhcp pool VLAN30_POOL
+ network 192.168.2.0 255.255.255.128
+ default-router 192.168.2.1
+ dns-server 8.8.8.8
+
+ip dhcp pool VLAN40_POOL
+ network 192.168.1.0 255.255.255.128
+ default-router 192.168.1.1
+ dns-server 8.8.8.8
+
+! --- 4. NAT / PAT y Ruta por Defecto ---
+ip route 0.0.0.0 0.0.0.0 19.0.0.1
+
+access-list 1 permit 192.168.0.0 0.0.7.255
+ip nat inside source list 1 interface Ethernet0/0 overload
+exit

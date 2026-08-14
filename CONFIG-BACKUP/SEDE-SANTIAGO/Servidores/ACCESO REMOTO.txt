@@ -1,0 +1,33 @@
+
+
+northline.com.do
+
+ip domain-name northline.com.do
+username yadiel secret Y4di3L@
+crypto key generate rsa modulus 2048
+ip ssh version 2
+
+
+line vty 0 4
+ login local
+ transport input ssh
+ exit
+ 
+ 
+ username localadmin privilege 15 secret TuClaveLocalSegura
+ username yadiel privilege 15 secret Y4di3L@
+
+
+line vty 0 4
+ login authentication default
+ transport input ssh
+ exit
+ 
+ 
+ 
+ $TTL 604800
+@ IN SOA ns1.northline.com.do. admin.northline.com.do. (1 604800 86400 2419200 604800)
+@ IN NS ns1.northline.com.do.
+
+ns1     IN A 192.168.4.51
+www IN A 192.168.4.50

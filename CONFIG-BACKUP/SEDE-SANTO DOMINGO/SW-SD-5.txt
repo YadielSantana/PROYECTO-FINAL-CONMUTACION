@@ -1,0 +1,30 @@
+enable
+configure terminal
+hostname SW-SD-5
+
+vlan 40
+ name Operaciones-Logisticas
+vlan 99
+ name ADMIN-RED
+exit
+
+interface Ethernet2/0
+ description VPC VLAN 40
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+
+! Si usas el puerto libre para un host en VLAN 99 Admin
+interface Ethernet0/1
+ description VPC VLAN 99 ADMIN
+ switchport mode access
+ switchport access vlan 99
+ no shutdown
+
+interface range Ethernet0/0 , Ethernet1/2
+ description Trunk to SW-SD-1 & SW-SD-2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 40,99
+ no shutdown
+exit
