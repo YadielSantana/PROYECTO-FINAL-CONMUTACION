@@ -1,0 +1,52 @@
+enable
+configure terminal
+hostname SW-PP-1
+
+! Creación de VLANs
+vlan 99
+ name ADMIN-RED
+vlan 210
+ name VENTAS_Y_ATENCION
+vlan 220
+ name CALL_CENTER
+vlan 230
+ name RECURSOS_HUMANOS
+exit
+
+! Configuración de SVI para administración (VLAN 99)
+interface vlan 99
+ ip address 192.168.4.178 255.255.255.240
+ no shutdown
+exit
+ip default-gateway 192.168.4.177
+
+! Puerto Troncal hacia el Router PUERTO-PLATA
+interface e0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 99,210,220,230
+ no shutdown
+
+! Configuración de Puertos de Acceso
+interface e1/0
+ description VPC31 Ventas y Atencion
+ switchport mode access
+ switchport access vlan 210
+ spanning-tree portfast
+ no shutdown
+
+interface e1/1
+ description VPC32 Call Center
+ switchport mode access
+ switchport access vlan 220
+ spanning-tree portfast
+ no shutdown
+
+interface e1/2
+ description VPC33 Recursos Humanos
+ switchport mode access
+ switchport access vlan 230
+ spanning-tree portfast
+ no shutdown
+exit
+write memory

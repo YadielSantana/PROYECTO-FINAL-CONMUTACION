@@ -20,6 +20,10 @@ interface e0/3
 ip address 19.0.0.1 255.255.255.252
 no sh
 
+interface e1/2
+description CONEXION CON R-PUERTO-PLATA
+ip address 19.0.0.13 255.255.255.252
+
 
 
 

@@ -1,0 +1,68 @@
+enable
+configure terminal
+hostname PUERTO-PLATA
+
+! Configuración de interfaces y subinterfaces (Gateways)
+interface e0/0
+ description Conexion a R-ISP
+ ip address 19.0.0.14 255.255.255.252
+ ip nat outside
+ no shutdown
+
+interface e0/1
+ description Conexion a SW-PP-1
+ no shutdown
+
+interface e0/1.99
+ description VLAN 99 ADMIN-RED
+ encapsulation dot1Q 99
+ ip address 192.168.4.177 255.255.255.240
+ ip nat inside
+
+interface e0/1.210
+ description VLAN 210 Ventas y Atencion
+ encapsulation dot1Q 210
+ ip address 192.168.3.225 255.255.255.224
+ ip nat inside
+
+interface e0/1.220
+ description VLAN 220 Call Center
+ encapsulation dot1Q 220
+ ip address 192.168.3.1 255.255.255.192
+ ip nat inside
+
+interface e0/1.230
+ description VLAN 230 Recursos Humanos
+ encapsulation dot1Q 230
+ ip address 192.168.4.65 255.255.255.240
+ ip nat inside
+
+! Exclusión de direcciones IP (Gateways)
+ip dhcp excluded-address 192.168.3.225
+ip dhcp excluded-address 192.168.3.1
+ip dhcp excluded-address 192.168.4.65
+
+! Configuración de Pools DHCP
+ip dhcp pool VLAN_210
+ network 192.168.3.224 255.255.255.224
+ default-router 192.168.3.225
+ dns-server 8.8.8.8
+
+ip dhcp pool VLAN_220
+ network 192.168.3.0 255.255.255.192
+ default-router 192.168.3.1
+ dns-server 8.8.8.8
+
+ip dhcp pool VLAN_230
+ network 192.168.4.64 255.255.255.240
+ default-router 192.168.4.65
+ dns-server 8.8.8.8
+
+! Configuración de NAT/PAT
+access-list 1 permit 192.168.0.0 0.0.255.255
+ip nat inside source list 1 interface e0/0 overload
+
+! Ruta estática por defecto hacia el ISP
+ip route 0.0.0.0 0.0.0.0 19.0.0.13
+exit
+write memory
