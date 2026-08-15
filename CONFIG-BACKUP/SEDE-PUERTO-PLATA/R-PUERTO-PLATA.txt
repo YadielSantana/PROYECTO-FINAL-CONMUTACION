@@ -97,4 +97,6 @@ interface Ethernet0/1.320
  ip ospf 1 area 300
 !
 interface Ethernet0/1.330
- ip ospf 1 area 300
+ip ospf 1 area 300
+DO WR
+ 

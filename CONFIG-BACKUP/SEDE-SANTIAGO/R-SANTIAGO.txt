@@ -96,6 +96,7 @@ interface Ethernet0/1.110
 !
 interface Ethernet0/1.120
  ip ospf 1 area 100
+ DO WR
 
  
  

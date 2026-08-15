@@ -98,3 +98,4 @@ ip ospf 1 area 400
 !
 interface Ethernet0/1.430
 ip ospf 1 area 400
+DO WR

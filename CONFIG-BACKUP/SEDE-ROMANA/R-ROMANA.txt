@@ -99,4 +99,4 @@ interface Ethernet0/1.220
 !
 interface Ethernet0/1.230
  ip ospf 1 area 200
- 
+ DO WR
