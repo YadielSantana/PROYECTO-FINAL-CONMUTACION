@@ -28,7 +28,7 @@ interface Ethernet0/1.100
  encapsulation dot1Q 100
  ip address 192.168.4.49 255.255.255.240
  ip nat inside
- ip helper-address 192.168.4.50
+ ip helper-address 192.168.4.51
 
 
 ! VLAN 110: Ventas (192.168.3.192/27)
@@ -36,7 +36,7 @@ interface Ethernet0/1.110
  encapsulation dot1Q 110
  ip address 192.168.3.193 255.255.255.224
  ip nat inside
- ip helper-address 192.168.4.50
+ ip helper-address 192.168.4.51
 
 
 ! VLAN 120: Administración (192.168.4.96/28)
@@ -44,7 +44,7 @@ interface Ethernet0/1.120
  encapsulation dot1Q 120
  ip address 192.168.4.97 255.255.255.240
  ip nat inside
- ip helper-address 192.168.4.50
+ ip helper-address 192.168.4.51
  
  ! VLAN 99 ADMIN-RED
 interface Ethernet0/1.99
@@ -69,9 +69,55 @@ end
 write memory
 
 
+-----------------------
+DMVPN Y OSPF
+-----------------------
+
+interface Tunnel0
+ ip address 192.168.5.2 255.255.255.0
+ ip nhrp network-id 1
+ ip nhrp nhs 192.168.5.1
+ ip nhrp map 192.168.5.1 19.0.0.2
+ ip nhrp map multicast 19.0.0.2
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ ip ospf network broadcast
+ ip ospf priority 0
+!
+router ospf 1
+ router-id 192.168.5.2
+ network 192.168.5.0 0.0.0.255 area 0
+ 
+ interface Ethernet0/1.100
+ ip ospf 1 area 100
+!
+interface Ethernet0/1.110
+ ip ospf 1 area 100
+!
+interface Ethernet0/1.120
+ ip ospf 1 area 100
+
+ 
+ 
+ 
+ 
+ 
 
 
---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------
 RADIUS
 -----------------------
 

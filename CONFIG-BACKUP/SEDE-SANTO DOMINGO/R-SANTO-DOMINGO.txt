@@ -70,3 +70,37 @@ ip route 0.0.0.0 0.0.0.0 19.0.0.1
 access-list 1 permit 192.168.0.0 0.0.7.255
 ip nat inside source list 1 interface Ethernet0/0 overload
 exit
+
+
+-----------------------
+DMVPN Y OSPF
+-----------------------
+
+interface Tunnel0
+ ip address 192.168.5.1 255.255.255.0
+ ip nhrp network-id 1
+ ip nhrp map multicast dynamic
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ ip ospf network broadcast
+ ip ospf priority 255
+!
+router ospf 1
+ router-id 192.168.5.1
+ network 192.168.5.0 0.0.0.255 area 0
+ 
+ interface Ethernet0/1.10
+ ip ospf 1 area 10
+!
+interface Ethernet0/1.20
+ ip ospf 1 area 10
+!
+interface Ethernet0/1.30
+ ip ospf 1 area 10
+!
+interface Ethernet0/1.40
+ ip ospf 1 area 10
+!
+interface Ethernet0/1.99
+ ip ospf 1 area 10
+ 

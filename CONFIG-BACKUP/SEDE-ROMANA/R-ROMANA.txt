@@ -66,3 +66,37 @@ ip nat inside source list 1 interface e0/0 overload
 ip route 0.0.0.0 0.0.0.0 19.0.0.9
 exit
 write memory
+
+
+
+
+-----------------------
+DMVPN Y OSPF
+-----------------------
+
+interface Tunnel0
+ ip address 192.168.5.3 255.255.255.0
+ ip nhrp network-id 1
+ ip nhrp nhs 192.168.5.1
+ ip nhrp map 192.168.5.1 19.0.0.2
+ ip nhrp map multicast 19.0.0.2
+ tunnel source Ethernet0/0
+ tunnel mode gre multipoint
+ ip ospf network broadcast
+ ip ospf priority 0
+!
+router ospf 1
+ router-id 192.168.5.3
+ network 192.168.5.0 0.0.0.255 area 0
+ interface Ethernet0/1.99
+ ip ospf 1 area 200
+!
+interface Ethernet0/1.210
+ ip ospf 1 area 200
+!
+interface Ethernet0/1.220
+ ip ospf 1 area 200
+!
+interface Ethernet0/1.230
+ ip ospf 1 area 200
+ 

@@ -1,0 +1,52 @@
+enable
+configure terminal
+hostname SW-BA-1
+
+! Creación de VLANs
+vlan 99
+ name ADMIN-RED
+vlan 410
+ name CALL_CENTER
+vlan 420
+ name VENTAS_Y_ATENCION
+vlan 430
+ name ADMINISTRACION
+exit
+
+! Configuración de SVI para administración (VLAN 99)
+interface vlan 99
+ ip address 192.168.4.130 255.255.255.240
+ no shutdown
+exit
+ip default-gateway 192.168.4.129
+
+! Puerto Troncal hacia el Router BARAHONA
+interface e0/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 99,410,420,430
+ no shutdown
+
+! Configuración de Puertos de Acceso
+interface e1/0
+ description VPC35 Call Center
+ switchport mode access
+ switchport access vlan 410
+ spanning-tree portfast
+ no shutdown
+
+interface e1/1
+ description VPC36 Ventas y Atencion
+ switchport mode access
+ switchport access vlan 420
+ spanning-tree portfast
+ no shutdown
+
+interface e1/2
+ description VPC37 Administracion
+ switchport mode access
+ switchport access vlan 430
+ spanning-tree portfast
+ no shutdown
+exit
+write memory
