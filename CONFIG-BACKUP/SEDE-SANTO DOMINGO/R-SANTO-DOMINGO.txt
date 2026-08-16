@@ -1,6 +1,22 @@
 enable
 configure terminal
 hostname SANTO-DOMINGO
+banner motd #
+========================================================
+             N O R T H   L I N E   R D
+========================================================
+        SISTEMA DE RED CORPORATIVA
+        ACCESO RESTRINGIDO - PERSONAL AUTORIZADO
+
+  ADVERTENCIA: Este dispositivo es propiedad de
+  North Line RD. Todo acceso es monitoreado y registrado.
+
+  El acceso no autorizado esta estrictamente prohibido.
+========================================================
+#
+ip domain name northlinerd.com.do
+ip name-server 192.168.4.51
+
 
 ! --- 1. Enlace WAN hacia R-ISP ---
 interface Ethernet0/0
@@ -18,24 +34,31 @@ interface Ethernet0/1.10
  encapsulation dot1Q 10
  ip address 192.168.0.1 255.255.255.0
  ip nat inside
+  ip tcp adjust-mss 1360
+
 
 interface Ethernet0/1.20
  description VLAN 20 Ventas
  encapsulation dot1Q 20
  ip address 192.168.2.129 255.255.255.128
  ip nat inside
+  ip tcp adjust-mss 1360
+
 
 interface Ethernet0/1.30
  description VLAN 30 RRHH
  encapsulation dot1Q 30
  ip address 192.168.2.1 255.255.255.128
  ip nat inside
+  ip tcp adjust-mss 1360
+
 
 interface Ethernet0/1.40
  description VLAN 40 Operaciones
  encapsulation dot1Q 40
  ip address 192.168.1.1 255.255.255.128
  ip nat inside
+ ip tcp adjust-mss 1360
 
 interface Ethernet0/1.99
  description VLAN 99 ADMIN-RED
@@ -47,22 +70,34 @@ interface Ethernet0/1.99
 ip dhcp pool VLAN10_POOL
  network 192.168.0.0 255.255.255.0
  default-router 192.168.0.1
- dns-server 8.8.8.8
+ update dns both override
+ dns-server 192.168.4.51
+ domain-name northlinerd.com.do
+ lease 0 12
 
 ip dhcp pool VLAN20_POOL
  network 192.168.2.128 255.255.255.128
  default-router 192.168.2.129
- dns-server 8.8.8.8
+ update dns both override
+ dns-server 192.168.4.51
+ domain-name northlinerd.com.do
+ lease 0 12
 
 ip dhcp pool VLAN30_POOL
  network 192.168.2.0 255.255.255.128
  default-router 192.168.2.1
- dns-server 8.8.8.8
+ update dns both override
+ dns-server 192.168.4.51
+ domain-name northlinerd.com.do
+ lease 0 12
 
 ip dhcp pool VLAN40_POOL
  network 192.168.1.0 255.255.255.128
  default-router 192.168.1.1
- dns-server 8.8.8.8
+ update dns both override
+ dns-server 192.168.4.51
+ domain-name northlinerd.com.do
+ lease 0 12
 
 ! --- 4. NAT / PAT y Ruta por Defecto ---
 ip route 0.0.0.0 0.0.0.0 19.0.0.1
@@ -78,6 +113,7 @@ DMVPN Y OSPF
 
 interface Tunnel0
  ip address 192.168.5.1 255.255.255.0
+ ip tcp adjust-mss 1360
  ip nhrp network-id 1
  ip nhrp map multicast dynamic
  tunnel source Ethernet0/0

@@ -30,18 +30,24 @@ interface Port-channel 1
 interface range Ethernet1/1 - 2, Ethernet0/3
  switchport mode access
  switchport access vlan 100
+ spanning-tree portfast
+
  no shutdown
 
 ! --- PUERTO DE ACCESO (Ventas - VLAN 110) ---
 interface Ethernet2/0
  switchport mode access
  switchport access vlan 110
+ spanning-tree portfast
+
  no shutdown
 
 ! --- PUERTO DE ACCESO (Administración - VLAN 120) ---
 interface Ethernet2/1
  switchport mode access
  switchport access vlan 120
+ spanning-tree portfast
+
  no shutdown
  
  interface vlan 99

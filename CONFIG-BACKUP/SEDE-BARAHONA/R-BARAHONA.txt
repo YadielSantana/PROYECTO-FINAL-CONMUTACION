@@ -1,6 +1,22 @@
 enable
 configure terminal
 hostname BARAHONA
+banner motd #
+========================================================
+             N O R T H   L I N E   R D
+========================================================
+        SISTEMA DE RED CORPORATIVA
+        ACCESO RESTRINGIDO - PERSONAL AUTORIZADO
+
+  ADVERTENCIA: Este dispositivo es propiedad de
+  North Line RD. Todo acceso es monitoreado y registrado.
+
+  El acceso no autorizado esta estrictamente prohibido.
+========================================================
+#
+
+ip domain name northlinerd.com.do
+ip name-server 192.168.4.51
 
 ! Configuración de interfaces y subinterfaces (Gateways)
 interface e0/0
@@ -46,17 +62,26 @@ ip dhcp excluded-address 192.168.4.193
 ip dhcp pool VLAN_410
  network 192.168.3.64 255.255.255.192
  default-router 192.168.3.65
- dns-server 8.8.8.8
+ update dns both override
+ dns-server 192.168.4.51
+ domain-name northlinerd.com.do
+ lease 0 12
 
 ip dhcp pool VLAN_420
  network 192.168.4.0 255.255.255.224
  default-router 192.168.4.1
- dns-server 8.8.8.8
+ update dns both override
+ dns-server 192.168.4.51
+ domain-name northlinerd.com.do
+ lease 0 12
 
 ip dhcp pool VLAN_430
  network 192.168.4.192 255.255.255.240
  default-router 192.168.4.193
- dns-server 8.8.8.8
+ update dns both override
+ dns-server 192.168.4.51
+ domain-name northlinerd.com.do
+ lease 0 12
 
 ! Configuración de NAT/PAT
 access-list 1 permit 192.168.0.0 0.0.255.255

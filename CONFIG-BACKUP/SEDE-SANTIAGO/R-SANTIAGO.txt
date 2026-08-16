@@ -1,14 +1,23 @@
-===================
-R-SANTIAGO
-===================
 
-Configuracion Basica
------------------------
 
 enable
 configure terminal
 
 hostname SANTIAGO
+
+banner motd #
+========================================================
+             N O R T H   L I N E   R D
+========================================================
+        SISTEMA DE RED CORPORATIVA
+        ACCESO RESTRINGIDO - PERSONAL AUTORIZADO
+
+  ADVERTENCIA: Este dispositivo es propiedad de
+  North Line RD. Todo acceso es monitoreado y registrado.
+
+  El acceso no autorizado esta estrictamente prohibido.
+========================================================
+#
 
 
 interface Ethernet0/0
@@ -29,6 +38,8 @@ interface Ethernet0/1.100
  ip address 192.168.4.49 255.255.255.240
  ip nat inside
  ip helper-address 192.168.4.51
+ ip tcp adjust-mss 1360
+
 
 
 ! VLAN 110: Ventas (192.168.3.192/27)
@@ -37,6 +48,8 @@ interface Ethernet0/1.110
  ip address 192.168.3.193 255.255.255.224
  ip nat inside
  ip helper-address 192.168.4.51
+ ip tcp adjust-mss 1360
+
 
 
 ! VLAN 120: Administración (192.168.4.96/28)
@@ -45,6 +58,8 @@ interface Ethernet0/1.120
  ip address 192.168.4.97 255.255.255.240
  ip nat inside
  ip helper-address 192.168.4.51
+ ip tcp adjust-mss 1360
+
  
  ! VLAN 99 ADMIN-RED
 interface Ethernet0/1.99
@@ -75,6 +90,7 @@ DMVPN Y OSPF
 
 interface Tunnel0
  ip address 192.168.5.2 255.255.255.0
+ ip tcp adjust-mss 1360
  ip nhrp network-id 1
  ip nhrp nhs 192.168.5.1
  ip nhrp map 192.168.5.1 19.0.0.2
