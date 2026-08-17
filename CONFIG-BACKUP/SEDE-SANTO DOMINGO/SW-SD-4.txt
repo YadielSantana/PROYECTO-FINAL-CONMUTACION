@@ -1,6 +1,19 @@
 enable
 configure terminal
 hostname SW-SD-4
+banner motd #
+========================================================
+             N O R T H   L I N E   R D
+========================================================
+        SISTEMA DE RED CORPORATIVA
+        ACCESO RESTRINGIDO - PERSONAL AUTORIZADO
+
+  ADVERTENCIA: Este dispositivo es propiedad de
+  North Line RD. Todo acceso es monitoreado y registrado.
+
+  El acceso no autorizado esta estrictamente prohibido.
+========================================================
+#
 
 vlan 30
  name Recursos-Humanos

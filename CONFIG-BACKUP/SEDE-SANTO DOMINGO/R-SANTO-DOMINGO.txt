@@ -17,7 +17,6 @@ banner motd #
 ip domain name northlinerd.com.do
 ip name-server 192.168.4.51
 
-
 ! --- 1. Enlace WAN hacia R-ISP ---
 interface Ethernet0/0
  description WAN to ISP
@@ -25,48 +24,35 @@ interface Ethernet0/0
  ip nat outside
  no shutdown
 
-! --- 2. Inter-VLAN Routing (Subinterfaces en e0/1) ---
+! --- 2. Loopback para DHCP Relay / router-id estable ---
+interface Loopback0
+ description DHCP-Relay-Target
+ ip address 192.168.9.1 255.255.255.255
+
+! --- 3. Enlace ruteado hacia SW-SD-1 (multicapa) ---
 interface Ethernet0/1
+ description Routed Link to SW-SD-1
  no shutdown
-
-interface Ethernet0/1.10
- description VLAN 10 Call Center
- encapsulation dot1Q 10
- ip address 192.168.0.1 255.255.255.0
- ip nat inside
-  ip tcp adjust-mss 1360
-
-
-interface Ethernet0/1.20
- description VLAN 20 Ventas
- encapsulation dot1Q 20
- ip address 192.168.2.129 255.255.255.128
- ip nat inside
-  ip tcp adjust-mss 1360
-
-
-interface Ethernet0/1.30
- description VLAN 30 RRHH
- encapsulation dot1Q 30
- ip address 192.168.2.1 255.255.255.128
- ip nat inside
-  ip tcp adjust-mss 1360
-
-
-interface Ethernet0/1.40
- description VLAN 40 Operaciones
- encapsulation dot1Q 40
- ip address 192.168.1.1 255.255.255.128
+ ip address 192.168.4.145 255.255.255.252
  ip nat inside
  ip tcp adjust-mss 1360
+ duplex full
 
-interface Ethernet0/1.99
- description VLAN 99 ADMIN-RED
- encapsulation dot1Q 99
- ip address 192.168.4.129 255.255.255.240
+! --- 4. Enlace ruteado hacia SW-SD-2 (multicapa) ---
+interface Ethernet0/2
+ description Routed Link to SW-SD-2
+ no shutdown
+ ip address 192.168.4.149 255.255.255.252
  ip nat inside
+ ip tcp adjust-mss 1360
+ duplex full
 
-! --- 3. Pools DHCP para los Clientes ---
+! --- 5. Pools DHCP para los Clientes (relay desde SVIs de los switches) ---
+ip dhcp excluded-address 192.168.0.1 192.168.0.3
+ip dhcp excluded-address 192.168.2.129 192.168.2.131
+ip dhcp excluded-address 192.168.2.1 192.168.2.3
+ip dhcp excluded-address 192.168.1.1 192.168.1.3
+
 ip dhcp pool VLAN10_POOL
  network 192.168.0.0 255.255.255.0
  default-router 192.168.0.1
@@ -99,7 +85,7 @@ ip dhcp pool VLAN40_POOL
  domain-name northlinerd.com.do
  lease 0 12
 
-! --- 4. NAT / PAT y Ruta por Defecto ---
+! --- 6. NAT / PAT y Ruta por Defecto ---
 ip route 0.0.0.0 0.0.0.0 19.0.0.1
 
 access-list 1 permit 192.168.0.0 0.0.7.255
@@ -124,21 +110,10 @@ interface Tunnel0
 router ospf 1
  router-id 192.168.5.1
  network 192.168.5.0 0.0.0.255 area 0
- 
- interface Ethernet0/1.10
- ip ospf 1 area 10
-!
-interface Ethernet0/1.20
- ip ospf 1 area 10
-!
-interface Ethernet0/1.30
- ip ospf 1 area 10
-!
-interface Ethernet0/1.40
- ip ospf 1 area 10
-!
-interface Ethernet0/1.99
- ip ospf 1 area 10
- DO WR
- 
+ network 192.168.4.144 0.0.0.3 area 10
+ network 192.168.4.148 0.0.0.3 area 10
+ network 192.168.9.1 0.0.0.0 area 10
+
+end
+wr
  
