@@ -3,7 +3,7 @@
 **Bloque privado asignado:** `192.168.0.0/16`
 **Bloque público asignado:** `19.0.0.0/24`
 
-> Cada sección muestra la tabla tal como está diseñada en el Excel (imagen) y, debajo, la misma información en una tabla HTML desplegable (`<details>`) para que se pueda copiar el texto, buscar en la página o leerla con lector de pantalla.
+
 
 ---
 
