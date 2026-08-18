@@ -1,18 +1,105 @@
+========================================
+Usuarios - RADIUS 
+
+Ruta: sudo nano /etc/freeradius/3.0/users
+=======================================
+
+
+
+sudo nano /etc/freeradius/3.0/users
+
+
+"yadiel" Cleartext-Password := "yadiel123"
+        Service-Type = Administrative-User,
+        Cisco-AVPair = "shell:priv-lvl=15"
+
+
+
+"carlos" Cleartext-Password := "carlos123"
+        Service-Type = Administrative-User,
+        Cisco-AVPair = "shell:priv-lvl=15"
+
+
+
+"irving" Cleartext-Password := "irving123"
+        Service-Type = Administrative-User,
+        Cisco-AVPair = "shell:priv-lvl=15"
+
+
+
+"alexander" Cleartext-Password := "alexander123"
+        Service-Type = Administrative-User,
+        Cisco-AVPair = "shell:priv-lvl=15"
+
+
+"nathanael" Cleartext-Password := "nathanael123"
+        Service-Type = Administrative-User,
+        Cisco-AVPair = "shell:priv-lvl=15"
+
+
+"josue" Cleartext-Password := "josue123"
+        Service-Type = Administrative-User,
+        Cisco-AVPair = "shell:priv-lvl=15"
+
+
+
+==================================================
+Clientes - RADIUS 
+
+Ruta: sudo nano /etc/freeradius/3.0/clients.conf
+====================================================
+
+
+#======================SANTIAGO==============================
+
 client R-SANTIAGO {
     ipaddr = 192.168.4.145
-    secret = northline2026@
+    secret = northline2026
 }
 
 
 client SW-SAN-1 {
     ipaddr = 192.168.4.146
-    secret = northline2026@
+    secret = northline2026
 }
 
 
 client SW-SAN-2 {
     ipaddr = 192.168.4.147
-    secret = northline2026@
+    secret = northline2026
+}
+
+#======================Santo-Domingo==============================
+
+client R-SANTO-DOMINGO {
+    ipaddr = 192.168.4.129
+    secret = northline2026
+}
+
+
+#======================Barahora==============================
+
+
+client R-BARAHONA {
+    ipaddr = 192.168.4.193
+    secret = northline2026
+}
+
+
+#======================Puerto-Plata==============================
+
+client R-PUERTO-PLATA {
+    ipaddr = 192.168.4.177
+    secret = northline2026
+}
+
+
+#======================ROMANA==============================
+
+
+client R-ROMANA {
+    ipaddr = 192.168.4.161
+    secret = northline2026
 }
 
 

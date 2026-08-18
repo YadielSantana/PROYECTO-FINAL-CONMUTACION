@@ -124,3 +124,56 @@ ip ospf 1 area 400
 interface Ethernet0/1.430
 ip ospf 1 area 400
 DO WR
+
+
+-----------------------
+IPsec
+-----------------------
+
+crypto isakmp policy 10
+ encr aes
+ authentication pre-share
+ group 14
+crypto isakmp key northline2026 address 0.0.0.0
+!
+crypto ipsec transform-set TS esp-aes esp-sha-hmac
+ mode transport
+!
+crypto ipsec profile DMVPN_PROFILE
+ set transform-set TS
+ 
+ interface Tunnel0
+ tunnel protection ipsec profile DMVPN_PROFILE
+
+
+
+-----------------------
+RADIUS
+-----------------------
+
+enable
+conf t
+
+enabel secret yadiel123
+ip domain-name northline.com.do
+ username yadiel privilege 15 secret yadiel123
+crypto key generate rsa modulus 2048
+ip ssh version 2
+line vty 0 4
+ login local
+ transport input ssh
+ line console 0
+ login local
+ exit
+ 
+aaa new-model
+radius server FREERADIUS_SERVER
+ address ipv4 192.168.4.53 auth-port 1812 acct-port 1813
+ key northline2026
+ ip radius source-interface Ethernet0/1.430
+ aaa authentication login default group radius local
+ line vty 0 4
+ login authentication default
+ transport input ssh
+ end
+ wr
