@@ -1,16 +1,3 @@
-```
-+------------------------------------------------------------------+
-|                                                                  |
-|                     N O R T H L I N E   R D                      |
-|                                                                  |
-|         Mensajeria  ·  Paqueteria  ·  Logistica Nacional         |
-|                                                                  |
-|  Santo Domingo · Santiago · La Romana · Puerto Plata · Barahona  |
-|                                                                  |
-+------------------------------------------------------------------+
-```
-
-<p align="center"><strong>PNETLAB</strong> · <strong>OSPF Multiárea</strong> · <strong>ITLA</strong> · <strong>Empresa 3</strong> · <em>En progreso</em></p>
 
 <h1 align="center">Northline RD</h1>
 <p align="center"><em>Proyecto Final — Conmutación y Enrutamiento · Instituto Tecnológico de las Américas (ITLA)</em></p>
